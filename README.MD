@@ -38,7 +38,7 @@ code-editor/
 ### 1. Clone repo
 
 ```
-git clone <your-repo-link>
+git clone https://github.com/TanviKrishnan2005/code_editor.git
 cd code-editor
 ```
 
