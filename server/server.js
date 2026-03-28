@@ -12,26 +12,51 @@ const io = new Server(server, {
   cors: { origin: "*" }
 });
 
+// ✅ Store users in rooms
+const rooms = {};
+
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
   socket.on("join_room", (roomId) => {
     socket.join(roomId);
-    console.log("Joined room:", roomId);
+
+    if (!rooms[roomId]) {
+      rooms[roomId] = [];
+    }
+
+    // ✅ Prevent duplicate users
+    if (!rooms[roomId].includes(socket.id)) {
+      rooms[roomId].push(socket.id);
+    }
+
+    // Send updated users list
+    io.to(roomId).emit("room_users", rooms[roomId]);
   });
 
   socket.on("code_change", ({ roomId, code }) => {
     socket.to(roomId).emit("receive_code", code);
   });
 
- //chat feature
   socket.on("send_message", ({ roomId, message }) => {
-    console.log("Message:", message);
     socket.to(roomId).emit("receive_message", message);
   });
 
   socket.on("disconnect", () => {
-    console.log("User disconnected");
+    for (const roomId in rooms) {
+      rooms[roomId] = rooms[roomId].filter(
+        (id) => id !== socket.id
+      );
+
+      // ✅ Clean empty rooms
+      if (rooms[roomId].length === 0) {
+        delete rooms[roomId];
+      }
+
+      io.to(roomId).emit("room_users", rooms[roomId]);
+    }
+
+    console.log("User disconnected:", socket.id);
   });
 });
 
