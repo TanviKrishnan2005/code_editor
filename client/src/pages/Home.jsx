@@ -7,9 +7,8 @@ function Home() {
   const navigate = useNavigate();
 
   const joinRoom = () => {
-    if (roomId && username) {
-      navigate(`/editor/${roomId}?username=${username}`);
-    }
+    if (!roomId || !username) return;
+    navigate(`/editor/${roomId}?username=${username}`);
   };
 
   return (
@@ -17,26 +16,22 @@ function Home() {
       <h2>CodeCollab 💻</h2>
 
       <input
-        placeholder="Enter Username"
+        placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        style={{ padding: "10px", margin: "5px" }}
       />
 
       <br />
 
       <input
-        placeholder="Enter Room ID"
+        placeholder="Room ID"
         value={roomId}
         onChange={(e) => setRoomId(e.target.value)}
-        style={{ padding: "10px", margin: "5px" }}
       />
 
       <br />
 
-      <button onClick={joinRoom} style={{ padding: "10px 20px" }}>
-        Join Room
-      </button>
+      <button onClick={joinRoom}>Join</button>
     </div>
   );
 }

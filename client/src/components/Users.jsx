@@ -5,8 +5,8 @@ function Users({ roomId }) {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    socket.on("room_users", (usersList) => {
-      setUsers(usersList);
+    socket.on("room_users", (data) => {
+      setUsers(data);
     });
 
     return () => socket.off("room_users");
@@ -14,19 +14,15 @@ function Users({ roomId }) {
 
   return (
     <div style={{
-      height: "100%",
+      width: "200px",
       background: "#2c2c2c",
       color: "white",
-      padding: "10px",
-      overflowY: "auto",
-      borderRight: "1px solid #333"
+      padding: "10px"
     }}>
-      <h4>👥 Active Users ({users.length})</h4>
+      <h4>Users ({users.length})</h4>
 
-      {users.map((user, i) => (
-        <div key={i}>
-          👤 {user.username}
-        </div>
+      {users.map((u, i) => (
+        <div key={i}>{u.username}</div>
       ))}
     </div>
   );

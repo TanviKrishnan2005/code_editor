@@ -2,32 +2,26 @@ import Editor from "@monaco-editor/react";
 import { useEffect, useState } from "react";
 import { socket } from "../socket";
 
-function CodeEditor({ roomId }) {
+function CodeEditor({ roomId, username }) {
   const [code, setCode] = useState("// Start coding...");
 
   useEffect(() => {
-    if (!roomId) return;
-
-    socket.emit("join_room", roomId);
+    socket.emit("join_room", { roomId, username });
 
     socket.on("receive_code", (newCode) => {
-      if (newCode !== null && newCode !== undefined) {
-        setCode(newCode);
-      }
+      setCode(newCode);
     });
 
-    return () => {
-      socket.off("receive_code");
-    };
-  }, [roomId]);
+    return () => socket.off("receive_code");
+  }, [roomId, username]);
 
   const handleChange = (value = "") => {
     setCode(value);
-    socket.emit("join_room", { roomId, username });
+    socket.emit("code_change", { roomId, code: value });
   };
 
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
+    <div style={{ flex: 1 }}>
       <Editor
         height="100%"
         defaultLanguage="javascript"

@@ -14,16 +14,16 @@ function Chat({ roomId, username }) {
   }, []);
 
   const sendMessage = () => {
-    if (message.trim()) {
-      socket.emit("send_message", {
-        roomId,
-        message,
-        username
-      });
+    if (!message.trim()) return;
 
-      setMessages((prev) => [...prev, { message, username }]);
-      setMessage("");
-    }
+    socket.emit("send_message", {
+      roomId,
+      message,
+      username
+    });
+
+    // ❌ DO NOT add locally (fixes duplicate issue)
+    setMessage("");
   };
 
   return (
@@ -41,7 +41,7 @@ function Chat({ roomId, username }) {
 
       <div style={{ flex: 1, overflowY: "auto" }}>
         {messages.map((msg, i) => (
-          <div key={i}>
+          <div key={i} style={{ marginBottom: "5px" }}>
             <strong>{msg.username}:</strong> {msg.message}
           </div>
         ))}
@@ -51,9 +51,19 @@ function Chat({ roomId, username }) {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Type message"
+        style={{ marginTop: "10px", padding: "5px" }}
       />
 
-      <button onClick={sendMessage}>Send</button>
+      <button
+        onClick={sendMessage}
+        style={{
+          marginTop: "5px",
+          padding: "6px",
+          cursor: "pointer"
+        }}
+      >
+        Send
+      </button>
     </div>
   );
 }
