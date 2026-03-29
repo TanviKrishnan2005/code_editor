@@ -4,15 +4,23 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+
+// Allow frontend URL
+app.use(cors({
+  origin: "https://code-editor-sigma-orpin.vercel.app",
+  methods: ["GET", "POST"]
+}));
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
-  cors: { origin: "*" }
+  cors: {
+    origin: "https://code-editor-sigma-orpin.vercel.app",
+    methods: ["GET", "POST"]
+  }
 });
 
-// ✅ Store users in rooms
+// Store users in rooms
 const rooms = {};
 
 io.on("connection", (socket) => {
@@ -25,7 +33,7 @@ io.on("connection", (socket) => {
       rooms[roomId] = [];
     }
 
-    // ✅ Prevent duplicate users
+    // Prevent duplicate users
     if (!rooms[roomId].includes(socket.id)) {
       rooms[roomId].push(socket.id);
     }
@@ -48,7 +56,6 @@ io.on("connection", (socket) => {
         (id) => id !== socket.id
       );
 
-      // ✅ Clean empty rooms
       if (rooms[roomId].length === 0) {
         delete rooms[roomId];
       }
