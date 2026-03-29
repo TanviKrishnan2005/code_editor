@@ -23,7 +23,7 @@ function CodeEditor({ roomId }) {
 
   const handleChange = (value = "") => {
     setCode(value);
-    socket.emit("code_change", { roomId, code: value });
+    socket.emit("join_room", { roomId, username });
   };
 
   return (

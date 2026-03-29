@@ -3,52 +3,38 @@ import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [roomId, setRoomId] = useState("");
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
   const joinRoom = () => {
-    if (roomId.trim()) {
-      navigate(`/editor/${roomId}`);
+    if (roomId && username) {
+      navigate(`/editor/${roomId}?username=${username}`);
     }
   };
 
   return (
-    <div style={{
-      display: "flex",
-      height: "100vh",
-      justifyContent: "center",
-      alignItems: "center",
-      flexDirection: "column",
-      gap: "15px",
-      background: "#121212",
-      color: "white"
-    }}>
-      <h1>CodeCollab 💻</h1>
+    <div style={{ textAlign: "center", marginTop: "100px" }}>
+      <h2>CodeCollab 💻</h2>
 
       <input
-        value={roomId}
-        onChange={(e) => setRoomId(e.target.value)}
-        placeholder="Enter Room ID"
-        style={{
-          padding: "12px",
-          fontSize: "16px",
-          borderRadius: "6px",
-          border: "none",
-          width: "250px"
-        }}
+        placeholder="Enter Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        style={{ padding: "10px", margin: "5px" }}
       />
 
-      <button
-        onClick={joinRoom}
-        style={{
-          padding: "10px 20px",
-          fontSize: "16px",
-          background: "#4CAF50",
-          color: "white",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer"
-        }}
-      >
+      <br />
+
+      <input
+        placeholder="Enter Room ID"
+        value={roomId}
+        onChange={(e) => setRoomId(e.target.value)}
+        style={{ padding: "10px", margin: "5px" }}
+      />
+
+      <br />
+
+      <button onClick={joinRoom} style={{ padding: "10px 20px" }}>
         Join Room
       </button>
     </div>

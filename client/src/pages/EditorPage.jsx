@@ -1,10 +1,14 @@
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import CodeEditor from "../components/CodeEditor";
 import Chat from "../components/Chat";
 import Users from "../components/Users";
 
 function EditorPage() {
   const { roomId } = useParams();
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const username = queryParams.get("username");
 
   return (
     <div style={{
@@ -14,7 +18,7 @@ function EditorPage() {
       overflow: "hidden"
     }}>
 
-      {/* 🔥 Top Bar */}
+      {/* Top Bar */}
       <div style={{
         height: "50px",
         display: "flex",
@@ -26,25 +30,19 @@ function EditorPage() {
         borderBottom: "1px solid #333"
       }}>
         <h3 style={{ margin: 0 }}>CodeCollab 💻</h3>
-        <span>Room: {roomId}</span>
+        <span>{username} | Room: {roomId}</span>
       </div>
 
-      {/* 🔥 Main Layout */}
       <div style={{ flex: 1, display: "flex" }}>
-
-        {/* Users Panel */}
         <div style={{ width: "220px" }}>
           <Users roomId={roomId} />
         </div>
 
-        {/* Editor */}
         <div style={{ flex: 1 }}>
-          <CodeEditor roomId={roomId} />
+          <CodeEditor roomId={roomId} username={username} />
         </div>
 
-        {/* Chat */}
-        <Chat roomId={roomId} />
-
+        <Chat roomId={roomId} username={username} />
       </div>
     </div>
   );

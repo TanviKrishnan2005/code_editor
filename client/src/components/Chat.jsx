@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { socket } from "../socket";
 
-function Chat({ roomId }) {
+function Chat({ roomId, username }) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    socket.on("receive_message", (msg) => {
-      setMessages((prev) => [...prev, msg]);
+    socket.on("receive_message", (data) => {
+      setMessages((prev) => [...prev, data]);
     });
 
     return () => socket.off("receive_message");
@@ -15,8 +15,13 @@ function Chat({ roomId }) {
 
   const sendMessage = () => {
     if (message.trim()) {
-      socket.emit("send_message", { roomId, message });
-      setMessages((prev) => [...prev, message]);
+      socket.emit("send_message", {
+        roomId,
+        message,
+        username
+      });
+
+      setMessages((prev) => [...prev, { message, username }]);
       setMessage("");
     }
   };
@@ -32,60 +37,23 @@ function Chat({ roomId }) {
       flexDirection: "column",
       borderLeft: "1px solid #333"
     }}>
-      <h3 style={{ marginBottom: "10px" }}>💬 Chat</h3>
+      <h3>💬 Chat</h3>
 
-      {/* Messages */}
-      <div style={{
-        flex: 1,
-        overflowY: "auto",
-        paddingRight: "5px"
-      }}>
+      <div style={{ flex: 1, overflowY: "auto" }}>
         {messages.map((msg, i) => (
-          <div key={i} style={{
-            background: "#333",
-            padding: "6px 10px",
-            borderRadius: "6px",
-            marginBottom: "6px",
-            fontSize: "14px"
-          }}>
-            {msg}
+          <div key={i}>
+            <strong>{msg.username}:</strong> {msg.message}
           </div>
         ))}
       </div>
 
-      {/* Input */}
-      <div style={{
-        marginTop: "10px",
-        display: "flex",
-        gap: "5px"
-      }}>
-        <input
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type message..."
-          style={{
-            flex: 1,
-            padding: "8px",
-            borderRadius: "5px",
-            border: "none",
-            outline: "none"
-          }}
-        />
+      <input
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Type message"
+      />
 
-        <button
-          onClick={sendMessage}
-          style={{
-            padding: "8px 12px",
-            background: "#4CAF50",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer"
-          }}
-        >
-          Send
-        </button>
-      </div>
+      <button onClick={sendMessage}>Send</button>
     </div>
   );
 }

@@ -5,7 +5,7 @@ const cors = require("cors");
 
 const app = express();
 
-// Allow frontend URL
+// ✅ Allow frontend URL
 app.use(cors({
   origin: "https://code-editor-sigma-orpin.vercel.app",
   methods: ["GET", "POST"]
@@ -20,53 +20,69 @@ const io = new Server(server, {
   }
 });
 
-// Store users in rooms
+// ✅ Store users per room
+// Format: { roomId: [{ id: socket.id, username }] }
 const rooms = {};
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
-  socket.on("join_room", (roomId) => {
+  // 🔥 JOIN ROOM WITH USERNAME
+  socket.on("join_room", ({ roomId, username }) => {
     socket.join(roomId);
 
     if (!rooms[roomId]) {
       rooms[roomId] = [];
     }
 
-    // Prevent duplicate users
-    if (!rooms[roomId].includes(socket.id)) {
-      rooms[roomId].push(socket.id);
+    // ✅ Prevent duplicate users
+    const exists = rooms[roomId].some(
+      (user) => user.id === socket.id
+    );
+
+    if (!exists) {
+      rooms[roomId].push({
+        id: socket.id,
+        username
+      });
     }
 
-    // Send updated users list
+    // Send updated user list
     io.to(roomId).emit("room_users", rooms[roomId]);
   });
 
+  // 🔁 CODE SYNC
   socket.on("code_change", ({ roomId, code }) => {
     socket.to(roomId).emit("receive_code", code);
   });
 
-  socket.on("send_message", ({ roomId, message }) => {
-    socket.to(roomId).emit("receive_message", message);
+  // 💬 CHAT WITH USERNAME
+  socket.on("send_message", ({ roomId, message, username }) => {
+    io.to(roomId).emit("receive_message", {
+      message,
+      username
+    });
   });
 
+  // ❌ DISCONNECT
   socket.on("disconnect", () => {
     for (const roomId in rooms) {
       rooms[roomId] = rooms[roomId].filter(
-        (id) => id !== socket.id
+        (user) => user.id !== socket.id
       );
 
       if (rooms[roomId].length === 0) {
         delete rooms[roomId];
+      } else {
+        io.to(roomId).emit("room_users", rooms[roomId]);
       }
-
-      io.to(roomId).emit("room_users", rooms[roomId]);
     }
 
     console.log("User disconnected:", socket.id);
   });
 });
 
+// ✅ PORT FIX (Render compatible)
 const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => {

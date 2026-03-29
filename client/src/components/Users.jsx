@@ -21,22 +21,13 @@ function Users({ roomId }) {
       overflowY: "auto",
       borderRight: "1px solid #333"
     }}>
-      <h4 style={{ marginBottom: "10px" }}>
-        👥 Active Users ({users.length})
-      </h4>
+      <h4>👥 Active Users ({users.length})</h4>
 
-      {users.length === 0 ? (
-        <p>No users</p>
-      ) : (
-        users.map((user, i) => (
-          <div key={i} style={{
-            padding: "6px",
-            borderBottom: "1px solid #444"
-          }}>
-            👤 User {i + 1}
-          </div>
-        ))
-      )}
+      {users.map((user, i) => (
+        <div key={i}>
+          👤 {user.username}
+        </div>
+      ))}
     </div>
   );
 }
