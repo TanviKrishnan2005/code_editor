@@ -1,109 +1,113 @@
+
+
 # 💻 CodeCollab — Real-Time Collaborative Code Editor
 
-A real-time collaborative code editor that allows multiple users to write code together, chat, and see active users — all inside a shared room.
+A real-time collaborative coding platform where multiple users can write code together, chat, and interact live inside shared rooms.
 
 ---
 
 ## 🚀 Live Demo
 
-👉 https://code-editor-sigma-orpin.vercel.app
+ [https://code-editor-sigma-orpin.vercel.app](https://code-editor-sigma-orpin.vercel.app)
 
 ---
 
 ## ✨ Features
 
-*  Real-time code synchronization
-*  Built-in chat system
+*  Real-time code synchronization across users
+*  Built-in chat system with usernames
 *  Live active users list
 *  Room-based collaboration
+*  Multi-language editor (JavaScript, Python, C++, Java)
+*  Code persistence (saved per room)
+*  Chat persistence (messages remain after refresh)
+*  Enter-to-send chat UX
+*  Clean and responsive UI
 *  Fully deployed (frontend + backend)
 
 ---
 
 ## 🛠️ Tech Stack
 
-* **Frontend:** React, Vite, Monaco Editor
-* **Backend:** Node.js, Express
-* **Real-time:** Socket.io
-* **Deployment:** Vercel (frontend), Render (backend)
+* Frontend: React, Vite, Monaco Editor
+* Backend: Node.js, Express
+* Real-time: Socket.io
+* Deployment: Vercel (frontend), Render (backend)
 
 ---
 
 ## 📂 Project Structure
 
-```
 code_editor/
 ├── client/   # React frontend
 ├── server/   # Node.js backend
-```
 
 ---
 
 ## ⚙️ How It Works
 
-* Users join a room using a room ID
+* Users join a room using a room ID and username
 * A WebSocket connection is established using Socket.io
-* Any code change is instantly broadcast to all users in that room
-* Messages are also synced in real-time
-* The server tracks active users per room
+* Code changes are instantly broadcast to all users in the same room
+* Chat messages are synced in real-time
+* Active users are tracked and updated dynamically
+* Code and chat are stored locally to persist across refresh
 
 ---
 
 ## 🧠 Challenges Faced
 
-* Handling duplicate users due to multiple socket connections
-* Managing real-time updates without lag
-* Fixing deployment issues (CORS + dynamic ports on Render)
+* Handling duplicate messages due to socket event emissions
+* Managing real-time synchronization without conflicts
+* Fixing deployment issues (CORS, dynamic ports on Render)
+* Resolving Vercel routing issues (404 on refresh)
+* Debugging asset loading issues (MIME type errors)
 
 ---
 
 ## 📌 What I Learned
 
-* How WebSockets work in real-time systems
-* Building and managing room-based architecture
-* Handling deployment issues in production
-* Debugging real-world problems
+* Building real-time applications using WebSockets
+* Designing room-based architectures
+* Handling state synchronization across clients
+* Debugging production deployment issues
+* Improving UX with persistence and real-time feedback
 
 ---
 
 ## 🧪 Local Setup
 
-### 1. Clone the repo
+1. Clone the repo
 
-```
-git clone https://github.com/TanviKrishnan2005/code_editor.git
+git clone [https://github.com/TanviKrishnan2005/code_editor.git](https://github.com/TanviKrishnan2005/code_editor.git)
 cd code_editor
-```
 
-### 2. Start backend
+2. Start backend
 
-```
 cd server
 npm install
 node server.js
-```
 
-### 3. Start frontend
+3. Start frontend
 
-```
 cd client
 npm install
 npm run dev
-```
 
 ---
 
 ## 📌 Future Improvements
 
-* Code execution feature
-* User authentication
-* File saving system
-* Better UI/UX
+* Code execution feature (run code inside editor)
+* User authentication system
+* Cloud-based code storage
+* Language sync across users
+* UI animations and enhancements
 
 ---
 
-## 👩‍💻 Author
+##  Author
 
 Tanvi Lekshmi RM
 
----
+
