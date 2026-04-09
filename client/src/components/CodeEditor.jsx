@@ -6,7 +6,7 @@ function CodeEditor({ roomId }) {
   const [code, setCode] = useState("// Start coding...");
   const [language, setLanguage] = useState("javascript");
 
-  // ✅ Load saved data
+  // Load saved data
   useEffect(() => {
     const savedCode = localStorage.getItem(roomId);
     const savedLang = localStorage.getItem(roomId + "_lang");
@@ -15,7 +15,7 @@ function CodeEditor({ roomId }) {
     if (savedLang) setLanguage(savedLang);
   }, [roomId]);
 
-  // ✅ Receive code
+  // Receive code
   useEffect(() => {
     socket.on("receive_code", (newCode) => {
       setCode(newCode);
@@ -24,7 +24,7 @@ function CodeEditor({ roomId }) {
     return () => socket.off("receive_code");
   }, []);
 
-  // ✅ Handle code change
+  // Handle code change
   const handleChange = (value = "") => {
     setCode(value);
 
@@ -33,7 +33,7 @@ function CodeEditor({ roomId }) {
     socket.emit("code_change", { roomId, code: value });
   };
 
-  // ✅ Handle language change
+  // Handle language change
   const handleLanguageChange = (e) => {
     setLanguage(e.target.value);
     localStorage.setItem(roomId + "_lang", e.target.value);
@@ -48,7 +48,7 @@ function CodeEditor({ roomId }) {
       flexDirection: "column"
     }}>
       
-      {/* 🔥 SMALL CONTROL BAR */}
+      {/* SMALL CONTROL BAR */}
       <div style={{
         height: "30px",
         display: "flex",
@@ -70,7 +70,7 @@ function CodeEditor({ roomId }) {
         </select>
       </div>
 
-      {/* 🔥 EDITOR (NO OVERFLOW NOW) */}
+      {/* EDITOR (NO OVERFLOW NOW) */}
       <div style={{
         flex: 1,
         borderRadius: "10px",

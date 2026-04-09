@@ -9,8 +9,8 @@ import Users from "../components/Users";
 function EditorPage() {
   const { roomId } = useParams();
 
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
+  const location = useLocation();//gives access to query string
+  const params = new URLSearchParams(location.search);//looks for room id from url
   const username = params.get("username");
 
   useEffect(() => {
@@ -18,7 +18,7 @@ function EditorPage() {
 
     console.log("Joining room:", roomId, username);
 
-    socket.emit("join_room", { roomId, username });
+    socket.emit("join_room", { roomId, username });// tell server about the user and emitsto evryone
 
   }, [roomId, username]);
 

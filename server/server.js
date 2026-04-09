@@ -28,7 +28,7 @@ io.on("connection", (socket) => {
     socket.join(roomId);
 
     if (!rooms[roomId]) rooms[roomId] = [];
-
+    // remove duplicates 
     const exists = rooms[roomId].some(user => user.id === socket.id);
 
     if (!exists) {
@@ -37,15 +37,16 @@ io.on("connection", (socket) => {
 
     io.to(roomId).emit("room_users", rooms[roomId]);
   });
-
+// emits msg to everyone except sender
   socket.on("code_change", ({ roomId, code }) => {
     socket.to(roomId).emit("receive_code", code);
   });
-
+//for chats emits to evryone
   socket.on("send_message", ({ roomId, message, username }) => {
     io.to(roomId).emit("receive_message", { message, username });
   });
 
+ // Deletes empty rooms to prevent memory buildup.
   socket.on("disconnect", () => {
     for (const roomId in rooms) {
       rooms[roomId] = rooms[roomId].filter(

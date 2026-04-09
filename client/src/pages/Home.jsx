@@ -7,6 +7,7 @@ function Home() {
   const navigate = useNavigate();
 
   const joinRoom = () => {
+    //without this user could join wihtout name
     if (!roomId || !username) return;
     navigate(`/editor/${roomId}?username=${username}`);
   };

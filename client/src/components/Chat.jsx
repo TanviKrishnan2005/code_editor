@@ -5,7 +5,7 @@ function Chat({ roomId, username }) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  // ✅ Load saved messages
+  // Load saved messages
   useEffect(() => {
     const saved = localStorage.getItem(roomId + "_chat");
     if (saved) {
@@ -13,7 +13,7 @@ function Chat({ roomId, username }) {
     }
   }, [roomId]);
 
-  // ✅ Receive messages (ignore own to avoid duplicate)
+  //  Receive messages (ignore own to avoid duplicate)
   useEffect(() => {
     socket.on("receive_message", (data) => {
       if (data.username !== username) {
@@ -28,7 +28,7 @@ function Chat({ roomId, username }) {
     return () => socket.off("receive_message");
   }, [roomId, username]);
 
-  // ✅ Send message
+  //  Send message
   const sendMessage = () => {
     if (!message.trim()) return;
 
